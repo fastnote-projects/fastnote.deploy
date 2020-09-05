@@ -1,0 +1,30 @@
+1.拉取镜像
+docker pull consul
+
+2.运行server
+#--net=host用主机的端口和ip不用容器内部的端口和ip
+
+#-e CONSUL_BIND_INTERFACE=ens33
+#ens33为网卡，因为我们用了--net=host，所以这里的网卡是主机的网卡，不是容器内的网卡，
+#CONSUL_BIND_INTERFACE等价于-bind
+#所以这里的意思是从ens33这个网卡找到ip地址，然后用这个ip做绑定提供给外部的server连接
+
+#如果开启了防火墙，注意打开端口
+
+#1.第一个server
+mkdir /mydata/consul/data -pv
+mkdir /mydata/consul/config -pv
+docker run -itd --net=host -e CONSUL_BIND_INTERFACE=ens33 -v /mydata/consul:/consul --name consul consul agent -server -ui -node server-master -client=0.0.0.0 -bootstrap-expect=1 -datacenter dc-chengdu
+#2.第二个server
+mkdir /mydata/consul/data -pv
+mkdir /mydata/consul/config -pv
+docker run -itd --net=host -e CONSUL_BIND_INTERFACE=ens33 -v /mydata/consul:/consul --name consul consul agent -server -ui -node server-node1 -client=0.0.0.0 -retry-join 192.168.126.10
+#3.第三个server
+mkdir /mydata/consul/data -pv
+mkdir /mydata/consul/config -pv
+docker run -itd --net=host -e CONSUL_BIND_INTERFACE=ens33 -v /mydata/consul:/consul --name consul consul agent -server -ui -node server-node2 -client=0.0.0.0 -retry-join 192.168.126.10
+#3设置完会选举leader
+
+3.运行client
+docker run -itd --net=host -e CONSUL_BIND_INTERFACE=ens33 --name consul consul agent -ui -node client-node3 -client=0.0.0.0 -retry-join=192.168.126.10
+

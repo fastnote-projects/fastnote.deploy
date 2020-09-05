@@ -1,0 +1,3 @@
+docker pull mysql
+docker run --name mysql -itd -e MYSQL_ROOT_PASSWORD=admin123 -p 3306:3306 --restart=always mysql
+ufw allow 3306

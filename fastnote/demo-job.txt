@@ -1,0 +1,17 @@
+https://gitee.com/developer333/FastNote.git
+
+1.参数
+	PROJECT
+
+	all
+	basic
+	identity
+
+	选择要编译的项目
+
+2.jenkinsfile
+	docker ps
+	echo $PROJECT
+	export CMD_PATH=$(pwd)/deploy/jenkins/build/build.sh
+	chmod +x $CMD_PATH
+	$CMD_PATH $PROJECT

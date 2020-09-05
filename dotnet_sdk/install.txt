@@ -1,0 +1,3 @@
+https://docs.microsoft.com/zh-cn/dotnet/core/install/linux-package-manager-ubuntu-1604
+
+docker pull mcr.microsoft.com/dotnet/core/aspnet:3.1
